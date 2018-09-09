@@ -57,7 +57,11 @@ class listaDC {
     void BorrarInicio();
     void borrarPosicion(int pos);
     int largoLista();
-    bool buscarProducto(string codigo);
+    bool buscarProducto(string pCodigo);
+    int  buscarProductoPos(string pCodigo);
+    void modificar(string pCodigo,string cambio,int atributo);
+    string consultarPrecio(string pCodigo);
+    void consultarProductosSuper(string pCodigoSuper);
     
    private:
     pnodoDC primero;
@@ -233,11 +237,11 @@ void listaDC:: borrarPosicion(int pos)
         cout << "Error en posicion" << endl;
    else
    {
-      if(pos==1)
+      if(pos==0)
         BorrarInicio();
       else
       {
-       int cont=2;
+       int cont=1;
        pnodoDC aux=  primero;
        while(cont<pos)
        {
@@ -273,4 +277,83 @@ bool listaDC::buscarProducto(string pCodigo){
   }
   if(aux->codigo == pCodigo){return true;}
   return false;
+}
+
+int listaDC::buscarProductoPos(string pCodigo){
+  int pos = 0;
+  pnodoDC aux = primero;
+  while(aux->siguiente != primero){
+    if(aux->codigo == pCodigo){return pos;}
+    aux = aux->siguiente;
+    pos++;
+  }
+  if(aux->codigo == pCodigo){return pos;}
+  return -1;
+}
+
+void listaDC::modificar(string pCodigo,string cambio,int atributo){
+  pnodoDC aux = primero;
+  while(aux->siguiente != primero){
+    if(aux->codigo == pCodigo){
+      switch(atributo){
+        case 1:
+          aux->codSuper = cambio;
+          break
+        case 2:
+          aux->codigo = cambio;
+          break;
+        case 3:
+          aux->nombre = cambio;
+          break;
+        case 4:
+          aux->cantidad = cambio;
+          break;
+        case 5:
+          aux->precio = cambio;
+          break;
+        return
+      }
+    }
+    aux = aux->siguiente;
+  }
+  if(aux->codigo == pCodigo){
+    switch(atributo){
+        case 1:
+          aux->codSuper = cambio;
+          break
+        case 2:
+          aux->codigo = cambio;
+          break;
+        case 3:
+          aux->nombre = cambio;
+          break;
+        case 4:
+          aux->cantidad = cambio;
+          break;
+        case 5:
+          aux->precio = cambio;
+          break;
+  }
+}
+
+string listaDC::consultarPrecio(string pCodigo){
+  pnodoDC aux = primero;
+  while(aux->siguiente != primero){
+    if(aux->codigo == pCodigo){return aux->precio;}
+    aux = aux->siguiente;
+  }
+  if(aux->codigo == pCodigo){return aux->precio;}
+}
+
+void listaDC::consultarProductosSuper(string pCodigoSuper){
+  pnodoDC aux = primero;
+  while(aux->siguiente != primero){
+    if(aux->codSuper == pCodigoSuper){
+      cout << aux->nombre << endl;
+    }
+    aux = aux->siguiente;
+  }
+  if(aux->codSuper == pCodigoSuper){
+    cout << aux->nombre << endl;
+  }
 }

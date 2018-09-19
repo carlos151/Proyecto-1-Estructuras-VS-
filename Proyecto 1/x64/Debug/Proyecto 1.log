@@ -1,5 +1,2 @@
-﻿  pch.cpp
-  Proyecto 1.cpp
-c:\users\penas\desktop\tec\ii semestre 2018\estructuras\proyectos\proyecto 1\proyecto 1\listadoblecircular_usr.h(430): warning C4715: 'listaDC_usrAux::listaVacia': no todas las rutas de acceso de control devuelven un valor
-c:\users\penas\desktop\tec\ii semestre 2018\estructuras\proyectos\proyecto 1\proyecto 1\listadoblecircular_usr.h(447): warning C4715: 'listaDC_usrAux::verificarUsuario': no todas las rutas de acceso de control devuelven un valor
-  Proyecto 1.vcxproj -> C:\Users\penas\Desktop\TEC\II Semestre 2018\Estructuras\Proyectos\Proyecto 1\x64\Debug\Proyecto 1.exe
+﻿  Proyecto 1.cpp
+c:\users\penas\desktop\tec\ii semestre 2018\estructuras\proyectos\proyecto-1-estructuras-vs-\proyecto 1\listadoblecircular_usr.h(370): error C3867: 'listaC::Primero': sintaxis no estándar; utilice  '&' para crear un puntero al miembro

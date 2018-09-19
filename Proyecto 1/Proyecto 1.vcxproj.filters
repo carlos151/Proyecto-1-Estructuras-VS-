@@ -18,16 +18,19 @@
     <ClInclude Include="pch.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Proyecto-1-Estructuras-\listaSimple.h">
+    <ClInclude Include="Listadoblecircular_Inventario.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Proyecto-1-Estructuras-\Listadoblecircular_Usr.h">
+    <ClInclude Include="Listadoblecircular_Usr.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Proyecto-1-Estructuras-\Listadoblecircular_Inventario.h">
+    <ClInclude Include="listaSimple.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Proyecto-1-Estructuras-\Listadoble_Super.h">
+    <ClInclude Include="Listadoble_Super.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="listaCarrito.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
   </ItemGroup>

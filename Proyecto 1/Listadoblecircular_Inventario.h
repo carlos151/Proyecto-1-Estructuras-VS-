@@ -25,11 +25,25 @@ class nodoDC {
        siguiente = signodo;
     }
 
+  string getSuper() { return codSuper; }
+
+  string getNombre() { return nombre; }
+
+  string getCantidad() { return cantidad; }
+
+  string getPrecio() { return precio; }
+
+  void modificarCantidad(int cant) {
+	  cantidad = to_string(stoi(cantidad) - cant);
+  }
+
+  int compras = 0;
+
  private:
    string codSuper,codigo,nombre,cantidad,precio;
    nodoDC *siguiente;
    nodoDC *anterior;
-    
+   bool modificado = false;
         
    friend class listaDC;
 };
@@ -59,11 +73,20 @@ class listaDC {
     int largoLista();
     bool buscarProducto(string pCodigo);
     int  buscarProductoPos(string pCodigo);
+	pnodoDC buscarNodoPos(string pCodigo);
     void modificar(string pCodigo,string cambio,int atributo);
     string consultarPrecio(string pCodigo);
     void consultarProductosSuper(string pCodigoSuper);
+	void ultimosDosAgregados(string pCodigoSuper);
+	void ultimoModificado();
+	void ultimoProdBorrado();
+	void productoMasVendido();
+	void productoMenosVendido();
     
    private:
+	void resetearBanderasMod();
+
+	string ultimoBorrado = "";
     pnodoDC primero;
     pnodoDC actual;
 };
@@ -93,7 +116,7 @@ int listaDC::largoLista()
     }
     else
     {
-        while(aux!=primero)
+        while(aux->siguiente != primero)
         {
           aux=aux->siguiente;
           cont++;
@@ -228,7 +251,6 @@ void listaDC::BorrarInicio()
 
 void listaDC:: borrarPosicion(int pos)
 {
-    
   if(ListaVacia())
     cout << "Lista vacia" <<endl;
   else
@@ -237,8 +259,10 @@ void listaDC:: borrarPosicion(int pos)
         cout << "Error en posicion" << endl;
    else
    {
-      if(pos==0)
-        BorrarInicio();
+	   if (pos == 0) {
+		   ultimoBorrado = primero->nombre + ";" + primero->codigo;
+		   BorrarInicio();
+	   }
       else
       {
        int cont=1;
@@ -249,6 +273,7 @@ void listaDC:: borrarPosicion(int pos)
          cont++;
        }
        pnodoDC temp = aux->siguiente;
+	   ultimoBorrado = temp->nombre + ";" + temp->codigo;
        aux->siguiente=aux->siguiente->siguiente;
        delete temp;
      }
@@ -293,12 +318,14 @@ int listaDC::buscarProductoPos(string pCodigo){
 
 void listaDC::modificar(string pCodigo,string cambio,int atributo){
   pnodoDC aux = primero;
+  resetearBanderasMod();
   while(aux->siguiente != primero){
     if(aux->codigo == pCodigo){
+	  aux->modificado = true;
       switch(atributo){
         case 1:
           aux->codSuper = cambio;
-          break
+          break;
         case 2:
           aux->codigo = cambio;
           break;
@@ -311,16 +338,17 @@ void listaDC::modificar(string pCodigo,string cambio,int atributo){
         case 5:
           aux->precio = cambio;
           break;
-        return
+        return;
       }
     }
     aux = aux->siguiente;
   }
   if(aux->codigo == pCodigo){
+	aux->modificado = true;
     switch(atributo){
         case 1:
           aux->codSuper = cambio;
-          break
+          break;
         case 2:
           aux->codigo = cambio;
           break;
@@ -333,16 +361,17 @@ void listaDC::modificar(string pCodigo,string cambio,int atributo){
         case 5:
           aux->precio = cambio;
           break;
+    }
   }
 }
 
 string listaDC::consultarPrecio(string pCodigo){
   pnodoDC aux = primero;
   while(aux->siguiente != primero){
-    if(aux->codigo == pCodigo){return aux->precio;}
+    if(aux->codigo == pCodigo){return aux->nombre + ": " + aux->precio;}
     aux = aux->siguiente;
   }
-  if(aux->codigo == pCodigo){return aux->precio;}
+  if(aux->codigo == pCodigo){return aux->nombre+": "+aux->precio;}
 }
 
 void listaDC::consultarProductosSuper(string pCodigoSuper){
@@ -356,4 +385,103 @@ void listaDC::consultarProductosSuper(string pCodigoSuper){
   if(aux->codSuper == pCodigoSuper){
     cout << aux->nombre << endl;
   }
+}
+
+pnodoDC listaDC::buscarNodoPos(string pCodigo) {
+	pnodoDC aux = primero;
+	while (aux->siguiente != primero) {
+		if (aux->codigo == pCodigo) { return aux; }
+		aux = aux->siguiente;
+	}
+	if (aux->codigo == pCodigo) { return aux; }
+	return false;
+}
+
+void listaDC::ultimosDosAgregados(string pCodigoSuper) {
+	cout << endl;
+	cout << "Ultimos dos productos agregados al super" << endl;
+	pnodoDC aux = primero->anterior;
+	int cont = 2;
+	while (cont != 0 && aux != primero) {
+		if (aux->codSuper == pCodigoSuper) {
+			cout << aux->nombre << ";" << aux->codigo << endl;
+			cont--;
+		}
+		aux = aux->anterior;
+	}
+	if (cont != 0 && aux->codSuper == pCodigoSuper) { cout << aux->nombre << ";" << aux->codigo << endl; }
+}
+
+void listaDC::resetearBanderasMod() {
+	pnodoDC aux = primero;
+	aux->anterior->modificado = false;
+	while (aux->siguiente != primero) {
+		aux->modificado = false;
+		aux = aux->siguiente;
+	}
+}
+
+void listaDC::ultimoModificado() {
+	cout << endl;
+	cout << "Ultimo producto modificado:" << endl;
+	pnodoDC aux = primero;
+	bool done = false;
+	while (aux->siguiente != primero) {
+		if (aux->modificado) {
+			cout << aux->nombre << ";" << aux->codigo << endl;
+			done = true;
+		}
+		aux = aux->siguiente;
+	}
+	if (aux->modificado) {
+		cout << aux->nombre << ";" << aux->codigo << endl;
+		done = true;
+	}
+	if (!done) { cout << "No se ha modificado nada" << endl; }
+}
+
+void listaDC::ultimoProdBorrado() {
+	cout << endl;
+	cout << "Ultimo producto borrado:" << endl;
+	if (ultimoBorrado == "") {
+		cout << "No se ha borrado nada" << endl;
+	}
+	else {
+		cout << ultimoBorrado << endl;
+	}
+
+}
+
+void listaDC::productoMasVendido() {
+	cout << endl;
+	cout << "Producto mas vendido:" << endl;
+	pnodoDC aux = primero;
+	pnodoDC producto = aux;
+	while (aux->siguiente != primero) {
+		if (aux->compras > producto->compras) {
+			producto = aux;
+		}
+		aux = aux->siguiente;
+	}
+	if (aux->compras > producto->compras) {
+		producto = aux;
+	}
+	cout << producto->nombre << ";" << producto->codigo << endl;
+}
+
+void listaDC::productoMenosVendido() {
+	cout << endl;
+	cout << "Producto menos vendido:" << endl;
+	pnodoDC aux = primero;
+	pnodoDC producto = aux;
+	while (aux->siguiente != primero) {
+		if (aux->compras < producto->compras) {
+			producto = aux;
+		}
+		aux = aux->siguiente;
+	}
+	if (aux->compras < producto->compras) {
+		producto = aux;
+	}
+	cout << producto->nombre << ";" << producto->codigo << endl;
 }

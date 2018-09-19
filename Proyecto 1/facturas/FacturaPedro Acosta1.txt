@@ -1,0 +1,15 @@
+Consecutivo factura: 1
+
+Cedula: 5903
+Nombre: Pedro Acosta
+Telefono: 9632587
+Codigo super: 56
+
+Producto | Cantidad | Precio ud. | Total
+Pan | 12 | 1236 | 14832
+Papas | 45 | 200 | 9000
+pepo | 45 | 411 | 18495
+
+Subtotal: 42327
+Descuento: 5
+Total: 40210.6

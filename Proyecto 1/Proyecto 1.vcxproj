@@ -151,10 +151,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Proyecto-1-Estructuras-\Listadoblecircular_Inventario.h" />
-    <ClInclude Include="..\..\Proyecto-1-Estructuras-\Listadoblecircular_Usr.h" />
-    <ClInclude Include="..\..\Proyecto-1-Estructuras-\Listadoble_Super.h" />
-    <ClInclude Include="..\..\Proyecto-1-Estructuras-\listaSimple.h" />
+    <ClInclude Include="listaCarrito.h" />
+    <ClInclude Include="Listadoblecircular_Inventario.h" />
+    <ClInclude Include="Listadoblecircular_Usr.h" />
+    <ClInclude Include="Listadoble_Super.h" />
+    <ClInclude Include="listaSimple.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

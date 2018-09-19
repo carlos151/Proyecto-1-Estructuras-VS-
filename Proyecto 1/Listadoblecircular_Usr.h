@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include "listaCarrito.h"
+
 using namespace std;
 
 class nodoUsr {
@@ -11,6 +13,7 @@ class nodoUsr {
        nombre = pNombre;
        telefono = pTelefono;
        tipo = pTipo;
+	   if (pTipo == "0" || pTipo == "3") { descuento = 5; }
        siguiente = NULL;
        anterior =NULL;
     }
@@ -22,14 +25,28 @@ class nodoUsr {
        nombre = pNombre;
        telefono = pTelefono;
        tipo = pTipo;
+       if(pTipo=="0" || pTipo=="3"){descuento = 5;}
        siguiente = signodo;
     }
 
+  int getDescuento(){return descuento;}
+  
+  void descuentoExtra() {
+	  descuento = 10;
+  }
+
+  void vaciarCarrito() {
+	  carrito->~listaC();
+  }
+
  private:
    string codCiudad,cedula,nombre,telefono,tipo;
+   int descuento,numFacturas;
    nodoUsr *siguiente;
    nodoUsr *anterior;
-    
+   listaC *carrito = new listaC;
+   int compras = 0;
+   int adminLogins = 0;
         
    friend class listaDC_usr;
 };
@@ -59,7 +76,18 @@ class listaDC_usr {
     void borrarPosicion(int pos);
     int largoLista();
     bool buscarUsuario(string pCedula);
-    
+	void consultarDescuentos();
+	void consultarDescuento(string pCodigo);
+	void comprar(string cedula,string nombre,string codSuper, int cantidad, float precio);
+	void mostrarCarro(string pCedula);
+	void descuentoExtra(string pCedula);
+	void facturar(string pCedula);
+	void masCompras();
+	void menosCompras();
+	void cantCompras(string pCedula);
+	void adminMasTrabajo();
+	void adminMenosTrabajo();
+	void aumentarLogin(string pCedula);
     
    private:
     pnodoUsr primero;
@@ -296,6 +324,175 @@ bool listaDC_usr::buscarUsuario(string pCedula){
   return false;
 }
 
+void listaDC_usr::consultarDescuentos() {
+	pnodoUsr aux = primero;
+	while (aux->siguiente != primero) {
+		cout << aux->nombre << ": " << aux->descuento << "%" << endl;
+		aux = aux->siguiente;
+	}
+	cout << aux->nombre << ": " << aux->descuento << "%" << endl;
+}
+
+void listaDC_usr::consultarDescuento(string pCodigo) {
+	pnodoUsr aux = primero;
+	while (aux->siguiente != primero) {
+		if (aux->cedula == pCodigo) {
+			cout << "Descuento: " << aux->descuento << "%" << endl;
+			return;
+		}
+		aux = aux->siguiente;
+	}
+	if (aux->cedula == pCodigo) {
+		cout << "Descuento: " << aux->descuento << "%" << endl;
+	}
+}
+
+void listaDC_usr::comprar(string pCedula,string nombre,string codSuper, int cantidad, float precio) {
+	pnodoUsr aux = primero;
+	while (aux->siguiente != primero) {
+		if (aux->cedula == pCedula) { 
+			aux->compras++;
+			aux->carrito->InsertarFinal(nombre, cantidad, precio,codSuper); 
+			return;
+		}
+		aux = aux->siguiente;
+	}
+	if (aux->cedula == pCedula) { 
+		aux->compras++;
+		aux->carrito->InsertarFinal(nombre, cantidad, precio,codSuper);
+	}
+}
+
+void listaDC_usr::mostrarCarro(string pCedula) {
+	pnodoUsr aux = primero;
+	while (aux->siguiente != primero) {
+		if (aux->cedula == pCedula) {
+			if (aux->carrito->Primero == NULL) {
+				cout << "Carrito vacio" << endl;
+				return;
+			}
+			else {
+				aux->carrito->Mostrar();
+				return;
+			}
+		}
+		aux = aux->siguiente;
+	}
+	if (aux->cedula == pCedula) {
+		if (aux->carrito == NULL) {
+			cout << "Carrito vacio" << endl;
+			return;
+		}
+		else {
+			aux->carrito->Mostrar();
+			return;
+		}
+	}
+}
+
+void listaDC_usr::descuentoExtra(string pCedula) {
+	pnodoUsr aux = primero;
+	while (aux->siguiente != primero) {
+		if (aux->cedula == pCedula) {
+			aux->descuentoExtra();
+			return;
+		}
+		aux = aux->siguiente;
+	}
+	if (aux->cedula == pCedula) { aux->descuentoExtra(); }
+}
+
+void listaDC_usr::facturar(string pCedula) {
+	pnodoUsr aux = primero;
+	while (aux->siguiente != primero) {
+		if (aux->cedula == pCedula) { 
+			aux->numFacturas++;
+			aux->carrito->facturar(pCedula,aux->telefono,aux->numFacturas,aux->descuento,aux->nombre);
+		}
+		aux = aux->siguiente;
+		aux->vaciarCarrito();
+	}
+	if (aux->cedula == pCedula) { 
+		aux->numFacturas++;
+		aux->carrito->facturar(pCedula,aux->telefono,aux->numFacturas,aux->descuento,aux->nombre);
+	}
+	aux->vaciarCarrito();
+}
+
+void listaDC_usr::masCompras() {
+	pnodoUsr aux = primero;
+	pnodoUsr cliente = aux;
+	while (aux->siguiente != primero) {
+		if (aux->compras > cliente->compras) {cliente = aux;}
+		aux = aux->siguiente;
+	}
+	if (aux->compras > cliente->compras) { cliente = aux; }
+	if (cliente->compras == 0) {
+		cout << "Nadie ha comprado" << endl;
+		return;
+	}
+	cout << cliente->nombre << endl;
+}
+
+void listaDC_usr::menosCompras() {
+	pnodoUsr aux = primero;
+	pnodoUsr cliente = aux;
+	while (aux->siguiente != primero) {
+		if (aux->compras < cliente->compras) { cliente = aux; }
+		aux = aux->siguiente;
+	}
+	if (aux->compras < cliente->compras) { cliente = aux; }
+	cout << cliente->nombre << endl;
+}
+
+void listaDC_usr::cantCompras(string pCedula) {
+	cout << "Cantidad de compras de ";
+	pnodoUsr aux = primero;
+	while (aux->siguiente != primero) {
+		if (aux->cedula == pCedula) { cout << aux->nombre << ": " << aux->compras << endl; return; }
+		aux = aux->siguiente;
+	}
+	if (aux->cedula == pCedula) { cout << aux->nombre << ": " << aux->compras << endl; }
+}
+
+void listaDC_usr::adminMasTrabajo() {
+	cout << endl;
+	pnodoUsr aux = primero;
+	pnodoUsr admin = aux;
+	while (aux->siguiente != primero) {
+		if (aux->adminLogins > admin->adminLogins) { admin = aux; }
+		aux = aux->siguiente;
+	}
+	if (aux->adminLogins > admin->adminLogins) { admin = aux; }
+	if (admin->adminLogins == 0) { cout << "Ningun admin ha trabajado" << endl; }
+	else {
+		cout << "Admin que mas trabajo: ";
+		cout << admin->nombre << endl;
+	}
+}
+
+void listaDC_usr::adminMenosTrabajo() {
+	cout << endl;
+	pnodoUsr aux = primero;
+	pnodoUsr admin = aux;
+	while (aux->siguiente != primero) {
+		if (aux->adminLogins < admin->adminLogins) { admin = aux; }
+		aux = aux->siguiente;
+	}
+	if (aux->adminLogins < admin->adminLogins) { admin = aux; }
+	cout << "Admin que menos trabajo: ";
+	cout << admin->nombre << endl;
+}
+
+void listaDC_usr::aumentarLogin(string pCedula) {
+	pnodoUsr aux = primero;
+	while (aux->siguiente != primero) {
+		if (aux->cedula == pCedula) { aux->adminLogins++; }
+		aux = aux->siguiente;
+	}
+	if (aux->cedula == pCedula) { aux->adminLogins++; }
+}
+
 class nodoUsr_tipo {
   public:
     nodoUsr_tipo(string pTipo){
@@ -350,6 +547,18 @@ class listaDC_usrAux {
     bool buscarUsuario(string cedula);
     bool verificarUsuario(string cedula,int tipo);
     bool listaVacia(int tipo);
+    void consultarDescuentos();
+	void consultarDescuento(string pCodigo, int tipo);
+	void comprar(string cedula, string nombre,string codSuper, int cantidad, float precio);
+	void verCarrito(string cedula);
+	void descuentoExtra(string cedula);
+	void facturar(string cedula);
+	void masCompras();
+	void menosCompras();
+	void cantCompras(string cedula);
+	void adminMasTrabajo();
+	void adminMenosTrabajo();
+	void aumentarLogin(string pCedula);
 
   private:
     pnodoUsr_tipo primero,actual;
@@ -444,4 +653,90 @@ bool listaDC_usrAux::verificarUsuario(string cedula,int tipo){
         return primero->siguiente->siguiente->siguiente->listaUsrs.buscarUsuario(cedula);
         break;
       }
+}
+
+void listaDC_usrAux::consultarDescuentos(){
+	primero->listaUsrs.consultarDescuentos();
+	primero->siguiente->siguiente->siguiente->listaUsrs.consultarDescuentos();
+}
+
+void listaDC_usrAux::consultarDescuento(string pCodigo, int tipo) {
+	switch (tipo) {
+		case 0:
+			primero->listaUsrs.consultarDescuento(pCodigo);
+			break;
+		case 3:
+			primero->siguiente->siguiente->siguiente->listaUsrs.consultarDescuento(pCodigo);
+			break;
+	}
+}
+
+void listaDC_usrAux::comprar(string cedula, string nombre,string codSuper,int cantidad, float precio) {
+	if (primero->listaUsrs.buscarUsuario(cedula)) {
+		primero->listaUsrs.comprar(cedula, nombre,codSuper, cantidad, precio);
+	}
+	else {
+		primero->siguiente->siguiente->siguiente->listaUsrs.comprar(cedula, nombre,codSuper, cantidad, precio);
+	}
+}
+
+void listaDC_usrAux::verCarrito(string cedula) {
+	if (primero->listaUsrs.buscarUsuario(cedula)) {
+		primero->listaUsrs.mostrarCarro(cedula);
+	}
+	else {
+		primero->siguiente->siguiente->siguiente->listaUsrs.mostrarCarro(cedula);
+	}
+}
+
+void listaDC_usrAux::descuentoExtra(string cedula) {
+	primero->siguiente->siguiente->siguiente->listaUsrs.consultarDescuento(cedula);
+}
+
+void listaDC_usrAux::facturar(string cedula) {
+	if (primero->listaUsrs.buscarUsuario(cedula)) {
+		primero->listaUsrs.facturar(cedula);
+	}
+	else {
+		primero->siguiente->siguiente->siguiente->listaUsrs.facturar(cedula);
+	}
+}
+
+void listaDC_usrAux::masCompras(){
+	cout << endl;
+	cout << "Cliente que mas compro:";
+	primero->listaUsrs.masCompras();
+	cout << endl;
+	cout << "Cliente-Funcionario que mas compro:";
+	primero->siguiente->siguiente->siguiente->listaUsrs.masCompras();
+}
+
+void listaDC_usrAux::menosCompras() {
+	cout << endl;
+	cout << "Cliente que menos compro:" << endl;
+	primero->listaUsrs.menosCompras();
+	cout << endl;
+	cout << "Cliente-Funcionario que menos compro:" << endl;
+	primero->siguiente->siguiente->siguiente->listaUsrs.menosCompras();
+}
+
+void listaDC_usrAux::cantCompras(string cedula) {
+	if (primero->listaUsrs.buscarUsuario(cedula)) {
+		primero->listaUsrs.cantCompras(cedula);
+	}
+	else {
+		primero->siguiente->siguiente->siguiente->listaUsrs.cantCompras(cedula);
+	}
+}
+
+void listaDC_usrAux::adminMasTrabajo() {
+	primero->siguiente->listaUsrs.adminMasTrabajo();
+}
+
+void listaDC_usrAux::adminMenosTrabajo() {
+	primero->siguiente->listaUsrs.adminMenosTrabajo();
+}
+
+void listaDC_usrAux::aumentarLogin(string pCedula) {
+	primero->siguiente->listaUsrs.aumentarLogin(pCedula);
 }

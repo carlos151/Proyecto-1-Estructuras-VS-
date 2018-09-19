@@ -25,6 +25,7 @@ class nodoD {
     string codigoCiudad,codigoSuper,nombre;
     nodoD *siguiente;
     nodoD *anterior;
+	int visitas;
     
         
    friend class listaD;
@@ -55,6 +56,9 @@ class listaD {
     void borrarPosicion(int pos);
     int largoLista();
     bool buscarSuper(string codigo);
+	void visitarSuper(string pCodSuper);
+	void masVisitas();
+	void menosVisitas();
     
    private:
     pnodoD primero;
@@ -261,4 +265,41 @@ bool listaD::buscarSuper(string codigo){
       aux = aux->siguiente;
   }
   return false;
+}
+
+void listaD::visitarSuper(string pCodSuper) {
+	pnodoD aux = primero;
+	while (aux != NULL) {
+		if (aux->codigoSuper == pCodSuper) {
+			aux->visitas++;
+		}
+		aux = aux->siguiente;
+	}
+}
+
+void listaD::masVisitas() {
+	cout << endl;
+	pnodoD aux = primero;
+	pnodoD super = aux;
+	while (aux != NULL) {
+		if (aux->visitas > super->visitas) { super = aux; }
+		aux = aux->siguiente;
+	}
+	if (super->visitas == 0) { cout << "No se ha visitado ningun super" << endl; }
+	else {
+		cout << "Super mas visitado:";
+		cout << super->nombre << ";" << super->codigoSuper << endl;
+	}
+}
+
+void listaD::menosVisitas() {
+	cout << endl;
+	pnodoD aux = primero;
+	pnodoD super = aux;
+	while (aux != NULL) {
+		if (aux->visitas < super->visitas) { super = aux; }
+		aux = aux->siguiente;
+	}
+	cout << "Super menos visitado:";
+	cout << super->nombre << ";" << super->codigoSuper << endl;
 }

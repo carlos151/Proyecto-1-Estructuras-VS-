@@ -367,14 +367,8 @@ void listaDC_usr::mostrarCarro(string pCedula) {
 	pnodoUsr aux = primero;
 	while (aux->siguiente != primero) {
 		if (aux->cedula == pCedula) {
-			if (aux->carrito->Primero == NULL) {
-				cout << "Carrito vacio" << endl;
-				return;
-			}
-			else {
-				aux->carrito->Mostrar();
-				return;
-			}
+			aux->carrito->Mostrar();
+			return;
 		}
 		aux = aux->siguiente;
 	}

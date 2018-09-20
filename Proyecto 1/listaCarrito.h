@@ -5,26 +5,24 @@ using namespace std;
 
 class nodoC {
 	public:
-		nodoC(string pNombre, int pCant, float pPrecio,string pCodSuper)
+		nodoC(string pNombre, int pCant, float pPrecio)
 		{
 			nombre = pNombre;
 			cantidad = pCant;
 			precio = pPrecio;
-			codSuper = pCodSuper;
 			siguiente = NULL;
 		}
 
-		nodoC(string pNombre, int pCant, float pPrecio,string pCodSuper, nodoC * signodo)
+		nodoC(string pNombre, int pCant, float pPrecio, nodoC * signodo)
 		{
 			nombre = pNombre;
 			cantidad = pCant;
 			precio = pPrecio;
-			codSuper = pCodSuper;
 			siguiente = signodo;
 		}
 
 	private:
-		string nombre,codSuper;
+		string nombre;
 		int cantidad;
 		float precio;
 		nodoC *siguiente;
@@ -40,9 +38,9 @@ class listaC {
 		listaC() { primero = actual = NULL; }
 		~listaC();
 
-	void InsertarInicio(string pNombre, int pCant, float pPrecio, string codSuper);
-	void InsertarFinal(string pNombre, int pCant, float pPrecio, string codSuper);
-	void InsertarPos(string pNombre, int pCant, float pPrecio, string codSuper, int pos);
+	void InsertarInicio(string pNombre, int pCant, float pPrecio);
+	void InsertarFinal(string pNombre, int pCant, float pPrecio);
+	void InsertarPos(string pNombre, int pCant, float pPrecio, int pos);
 	bool ListaVacia() { return primero == NULL; }
 	void Mostrar();
 	void Siguiente();
@@ -54,6 +52,12 @@ class listaC {
 	int largoLista();
 	float calcularTotal();
 	void facturar(string cedula,string telefono,int numFactura,int descuento,string nombre);
+
+	void setCodSuper(string pCodSuper) {
+		codSuper = pCodSuper;
+	}
+
+	string codSuper = "";
 
 	private:
 		pnodoC primero;
@@ -89,35 +93,35 @@ int listaC::largoLista() {
 
 }
 
-void listaC::InsertarInicio(string pNombre, int pCant, float pPrecio,string codSuper)
+void listaC::InsertarInicio(string pNombre, int pCant, float pPrecio)
 {
 	if (ListaVacia())
-		primero = new nodoC(pNombre, pCant, pPrecio,codSuper);
+		primero = new nodoC(pNombre, pCant, pPrecio);
 	else
-		primero = new nodoC(pNombre, pCant, pPrecio,codSuper, primero);
+		primero = new nodoC(pNombre, pCant, pPrecio ,primero);
 }
 
-void listaC::InsertarFinal(string pNombre, int pCant, float pPrecio, string codSuper)
+void listaC::InsertarFinal(string pNombre, int pCant, float pPrecio)
 {
 	if (ListaVacia())
-		primero = new nodoC(pNombre, pCant, pPrecio, codSuper);
+		primero = new nodoC(pNombre, pCant, pPrecio);
 	else
 	{
 		pnodoC aux = primero;
 		while (aux->siguiente != NULL)
 			aux = aux->siguiente;
-		aux->siguiente = new nodoC(pNombre, pCant, pPrecio,codSuper);
+		aux->siguiente = new nodoC(pNombre, pCant, pPrecio);
 	}
 }
 
 
-void listaC::InsertarPos(string pNombre, int pCant, float pPrecio,string codSuper, int pos)
+void listaC::InsertarPos(string pNombre, int pCant, float pPrecio, int pos)
 {
 	if (ListaVacia())
-		primero = new nodoC(pNombre, pCant, pPrecio, codSuper);
+		primero = new nodoC(pNombre, pCant, pPrecio);
 	else {
 		if (pos <= 1) {
-			pnodoC nuevo = new nodoC(pNombre, pCant, pPrecio, codSuper);
+			pnodoC nuevo = new nodoC(pNombre, pCant, pPrecio);
 			nuevo->siguiente = primero;
 			primero = nuevo;
 		}
@@ -128,7 +132,7 @@ void listaC::InsertarPos(string pNombre, int pCant, float pPrecio,string codSupe
 				i++;
 				aux = aux->siguiente;
 			}
-			pnodoC nuevo = new nodoC(pNombre, pCant, pPrecio, codSuper);
+			pnodoC nuevo = new nodoC(pNombre, pCant, pPrecio);
 			nuevo->siguiente = aux->siguiente;
 			aux->siguiente = nuevo;
 
@@ -263,7 +267,7 @@ void listaC::facturar(string cedula,string telefono,int numFactura,int descuento
 	outputFile << "Cedula: " << cedula << endl;
 	outputFile << "Nombre: " << nombre << endl;
 	outputFile << "Telefono: " << telefono << endl;
-	outputFile << "Codigo super: " << aux->codSuper << endl;
+	outputFile << "Codigo super: " << codSuper << endl;
 	outputFile << endl;
 	outputFile << "Producto | Cantidad | Precio ud. | Total" << endl;
 	while (aux != NULL) {

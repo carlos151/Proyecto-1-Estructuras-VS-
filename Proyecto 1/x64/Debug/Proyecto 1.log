@@ -1,2 +1,7 @@
 ﻿  Proyecto 1.cpp
-c:\users\penas\desktop\tec\ii semestre 2018\estructuras\proyectos\proyecto-1-estructuras-vs-\proyecto 1\listadoblecircular_usr.h(370): error C3867: 'listaC::Primero': sintaxis no estándar; utilice  '&' para crear un puntero al miembro
+c:\users\penas\desktop\tec\ii semestre 2018\estructuras\proyectos\proyecto-1-estructuras-vs-\proyecto 1\listadoblecircular_inventario.h(375): warning C4715: 'listaDC::consultarPrecio': no todas las rutas de acceso de control devuelven un valor
+c:\users\penas\desktop\tec\ii semestre 2018\estructuras\proyectos\proyecto-1-estructuras-vs-\proyecto 1\listadoblecircular_usr.h(643): warning C4715: 'listaDC_usrAux::listaVacia': no todas las rutas de acceso de control devuelven un valor
+c:\users\penas\desktop\tec\ii semestre 2018\estructuras\proyectos\proyecto-1-estructuras-vs-\proyecto 1\listadoblecircular_usr.h(660): warning C4715: 'listaDC_usrAux::verificarUsuario': no todas las rutas de acceso de control devuelven un valor
+c:\users\penas\desktop\tec\ii semestre 2018\estructuras\proyectos\proyecto-1-estructuras-vs-\proyecto 1\proyecto 1.cpp(565): warning C4717: 'menuVendedor': recursiva para todas las rutas de acceso de control; la función provocará el desbordamiento de la pila en tiempo de ejecución
+c:\users\penas\desktop\tec\ii semestre 2018\estructuras\proyectos\proyecto-1-estructuras-vs-\proyecto 1\proyecto 1.cpp(525): warning C4717: 'menuAdministrador': recursiva para todas las rutas de acceso de control; la función provocará el desbordamiento de la pila en tiempo de ejecución
+  Proyecto 1.vcxproj -> C:\Users\penas\Desktop\TEC\II Semestre 2018\Estructuras\Proyectos\Proyecto-1-Estructuras-VS-\x64\Debug\Proyecto 1.exe

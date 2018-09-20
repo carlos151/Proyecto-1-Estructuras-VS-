@@ -351,16 +351,26 @@ void listaDC_usr::comprar(string pCedula,string nombre,string codSuper, int cant
 	pnodoUsr aux = primero;
 	while (aux->siguiente != primero) {
 		if (aux->cedula == pCedula) { 
-			aux->compras++;
-			aux->carrito->InsertarFinal(nombre, cantidad, precio,codSuper); 
-			return;
+			cout << "hola" << endl;
+			if (aux->carrito->codSuper == "") { aux->carrito->codSuper = codSuper; }
+
+			if (aux->carrito->codSuper == codSuper) {
+				aux->compras++;
+				aux->carrito->InsertarFinal(nombre, cantidad, precio);
+				cout << "Producto agregado al carrito!" << endl;
+			}
+			else { cout << "El producto esta en un super distinto al del carrito" << endl; return; }
+			
 		}
 		aux = aux->siguiente;
 	}
-	if (aux->cedula == pCedula) { 
+	if (aux->carrito->codSuper == "") { aux->carrito->codSuper = codSuper; }
+	if (aux->cedula == pCedula && aux->carrito->codSuper == codSuper) {
 		aux->compras++;
-		aux->carrito->InsertarFinal(nombre, cantidad, precio,codSuper);
+		aux->carrito->InsertarFinal(nombre, cantidad, precio);
+		cout << "Producto agregado al carrito!" << endl;
 	}
+	else if(aux->cedula == pCedula) { cout << "El producto esta en un super distinto al del carrito" << endl; return; }
 }
 
 void listaDC_usr::mostrarCarro(string pCedula) {
@@ -655,6 +665,7 @@ void listaDC_usrAux::consultarDescuentos(){
 }
 
 void listaDC_usrAux::consultarDescuento(string pCodigo, int tipo) {
+	if()
 	switch (tipo) {
 		case 0:
 			primero->listaUsrs.consultarDescuento(pCodigo);
